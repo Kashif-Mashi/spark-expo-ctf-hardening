@@ -1,3 +1,5 @@
+![Spark Expo CTF](assets/banner.png)
+
 # Spark Expo CTF — Boot2Root VM Hardening & Event Infrastructure
 
 Write-up on hardening, customizing, and deploying a Boot2Root machine for a live,
