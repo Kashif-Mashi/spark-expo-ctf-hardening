@@ -1,0 +1,88 @@
+# 04 — Obfuscation, Scoring & Event-Day Infrastructure
+
+## Web path & flag obfuscation
+
+Because this base VM has existing public write-ups, leaving default paths
+and flag formats in place would let anyone search their way to the answers
+instead of solving the challenge. Three things were changed:
+
+**1. Renamed the predictable default directories:**
+
+| Original | Renamed to |
+|---|---|
+| `/flag/` | `/hidden_flag_dir/` |
+| `/admin_area/` | `/portal_secure_99/` |
+| `/uploaded_files/` | `/uos_uploads/` |
+
+The application's own PHP source was updated to point at the new upload
+path, and `robots.txt` was rewritten to disclose the *new* paths (plus decoy
+entries) so the recon step still worked as intended, just against paths a
+public write-up wouldn't reference.
+
+**2. Reformatted every flag** from the original's plain numeric-string format
+to a unified, event-branded format (`{EVENTNAME_FLAGN_XXXXXX}`), so a
+participant can't simply paste a number from an old write-up and have it
+match.
+
+**3. Shifted the web service off its default port** (80 → 8080), so a
+top-1000-ports scan misses it entirely and a full `nmap -p-` is required —
+rewarding thorough reconnaissance rather than a default scan.
+
+```bash
+sed -i 's/Listen 80/Listen 8080/g' /etc/apache2/ports.conf
+sed -i 's/<VirtualHost \*:80>/<VirtualHost \*:8080>/g' /etc/apache2/sites-enabled/000-default.conf
+service apache2 restart
+```
+
+## QA process (what actually went wrong, and how it was caught)
+
+A "blind test" pass — re-solving the entire machine end-to-end after
+customization, exactly as a participant would — caught three real bugs
+that a code review alone would have missed:
+
+- **A silent, partial find/replace failure.** One flag's replacement command
+  matched and worked; an identical-looking command for a different flag
+  silently matched nothing (a copy-paste encoding mismatch), leaving the
+  *original* flag value live. Caught only by manually reading the flag file
+  back after the "fix," not by assuming the command had succeeded.
+- **A typo in the final flag's text**, caught the same way.
+- **An over-corrected permission change.** One flag file being
+  world-readable initially looked like an unintended information leak, and
+  was locked down — which broke the actual intended discovery path, since
+  that file was *supposed* to be reachable by a low-privileged web shell as
+  part of the enumeration chain. Reverted after tracing the intended solve
+  path back through the challenge design.
+
+**Lesson:** verifying a fix by re-reading the actual target state (not by
+assuming a command that returned no error also did what it was supposed to)
+caught real, event-blocking issues before they reached participants.
+
+## CTFd integration
+
+- 5 challenges, chained via CTFd's per-challenge "requirements" so each flag
+  only becomes visible after the previous one is solved
+- Scoring: 50 / 100 / 150 / 200 / 250 = 750 points total, across Enumeration,
+  Web Exploitation, and Privilege Escalation categories
+- Verified with a full non-admin test account run before going live —
+  progressive unlock and scoring confirmed working end-to-end
+
+## Event-day network architecture
+
+With institutional hosting unavailable, the deployment model was:
+
+- **Per-participant isolation:** each participant's target VM and attacker
+  (Kali) VM ran side-by-side on their *own* laptop, connected only to each
+  other via a VirtualBox Host-Only network — never exposed to any other
+  participant's machine, and never handed over as a file
+- **Centralized live scoreboard:** CTFd ran on the organizer's laptop,
+  reachable separately over a dedicated mobile hotspot from each
+  participant's own browser (kept deliberately separate from the isolated
+  per-laptop attack traffic)
+- **Supervised deployment, not file distribution:** every target VM instance
+  was imported and powered on by the organizer directly, with participants
+  never given the VM file itself — closing off offline attack vectors
+  (disk-mounting the VM image, GRUB recovery-mode root access) that would
+  otherwise bypass the entire challenge
+
+This scaled to roughly 10 simultaneous participants on a single
+organizer-hosted hotspot.
