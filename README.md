@@ -31,6 +31,7 @@ live, competitive, red-team-style event:
 | [`docs/02-remediation.md`](docs/02-remediation.md) | Patching the unintended local-root CVEs without breaking the intended challenge |
 | [`docs/03-custom-privesc-design.md`](docs/03-custom-privesc-design.md) | Designing a genuine, from-scratch privilege-escalation challenge (GTFOBins-based) to replace the trivial original path |
 | [`docs/04-infrastructure.md`](docs/04-infrastructure.md) | Web-path/flag obfuscation, CTFd scoring integration, QA process, and event-day network architecture for ~10 simultaneous participants |
+| [`docs/05-ctfd-setup.md`](docs/05-ctfd-setup.md) | Deploying and configuring CTFd itself — challenge chaining, scoring, and the verification pass before going live |
 
 Supporting scripts (commands used, flag values redacted):
 
