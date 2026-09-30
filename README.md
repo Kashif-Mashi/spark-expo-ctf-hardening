@@ -1,10 +1,21 @@
-![Spark Expo CTF](assets/banner.png)
+<div align="center">
+  <img src="assets/banner.png" alt="Spark Expo CTF">
 
-# Spark Expo CTF — Boot2Root VM Hardening & Event Infrastructure
+  <h1>Spark Expo CTF</h1>
+  <h3>Boot2Root VM Hardening & Event Infrastructure</h3>
 
-Write-up on hardening, customizing, and deploying a Boot2Root machine for a live,
-university-wide Capture the Flag competition (Spark Expo, University of Sargodha),
-run as a selection round for NaSCon's Red Team CTF.
+  <p>Write-up on hardening, customizing, and deploying a Boot2Root machine for a live, university-wide Capture the Flag competition (Spark Expo, University of Sargodha), run as a selection round for NaSCon's Red Team CTF.</p>
+
+  <p>
+    <img src="https://img.shields.io/badge/Platform-VirtualBox-003366?style=for-the-badge&logo=virtualbox" alt="VirtualBox">
+    <img src="https://img.shields.io/badge/OS-Ubuntu_16.04_LTS-E95420?style=for-the-badge&logo=ubuntu&logoColor=white" alt="Ubuntu">
+    <img src="https://img.shields.io/badge/Web-Apache%20%2F%20PHP-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="Apache/PHP">
+    <img src="https://img.shields.io/badge/Scoreboard-CTFd-FF4B4B?style=for-the-badge" alt="CTFd">
+    <img src="https://img.shields.io/badge/Tools-Kali_Linux-557C94?style=for-the-badge&logo=kali-linux&logoColor=white" alt="Kali Linux">
+  </p>
+</div>
+
+<br/>
 
 **Base machine:** [JIS-CTF: VulnUpload](https://www.vulnhub.com/entry/jis-ctf-vulnupload,228/)
 (VulnHub, Ubuntu 16.04) — used as a starting point and substantially modified
@@ -39,10 +50,6 @@ Supporting scripts (commands used, flag values redacted):
 
 - [`scripts/harden.sh`](scripts/harden.sh) — all customization/hardening commands in one place
 - [`scripts/verify.sh`](scripts/verify.sh) — the verification pass run after every change
-
-## Tech stack
-
-`VirtualBox` · `Ubuntu 16.04 LTS` · `Apache / PHP` · `CTFd` (challenge platform & scoreboard) · `Kali Linux` (attacker tooling) · `nmap`, `gobuster`, `GTFOBins` methodology
 
 ## Outcome
 
